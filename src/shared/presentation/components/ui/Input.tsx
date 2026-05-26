@@ -1,4 +1,4 @@
-import { useState, useCallback } from 'react';
+import { useState, useCallback, forwardRef } from 'react';
 import {
     View,
     TextInput,
@@ -29,14 +29,14 @@ const COLORS = {
     iconUnfocused: '#64748B',
 };
 
-export function Input({
+export const Input = forwardRef<TextInput, InputProps>(({
     label,
     error,
     icon,
     isPassword,
     onBlur,
     ...props
-}: InputProps) {
+}, ref) => {
     const [isFocused, setIsFocused] = useState(false);
     const [isPasswordVisible, setIsPasswordVisible] = useState(false);
 
@@ -72,19 +72,23 @@ export function Input({
             </Text>
 
             {/* Input container */}
-            <View
+            <MotiView
+                animate={{
+                    borderColor,
+                    shadowOpacity: isFocused ? 0.1 : 0,
+                    scale: isFocused ? 1.02 : 1,
+                }}
+                transition={{ type: 'timing', duration: 200 }}
                 style={{
                     flexDirection: 'row',
                     alignItems: 'center',
                     backgroundColor,
                     borderRadius: 16,
                     borderWidth: isFocused || isError ? 1.5 : 1,
-                    borderColor,
                     paddingHorizontal: 16,
                     height: 56,
                     shadowColor: isFocused && !isError ? COLORS.borderFocused : '#000',
-                    shadowOffset: { width: 0, height: isFocused ? 2 : 0 },
-                    shadowOpacity: isFocused ? 0.1 : 0,
+                    shadowOffset: { width: 0, height: 2 },
                     shadowRadius: 4,
                     elevation: isFocused ? 2 : 0,
                 }}
@@ -99,6 +103,7 @@ export function Input({
                 )}
 
                 <TextInput
+                    ref={ref}
                     style={{
                         flex: 1,
                         fontFamily: 'Lato-Regular',
@@ -126,7 +131,7 @@ export function Input({
                         />
                     </Pressable>
                 )}
-            </View>
+            </MotiView>
 
             {/* Error message */}
             {error && (
@@ -150,4 +155,4 @@ export function Input({
             )}
         </View>
     );
-}
+});

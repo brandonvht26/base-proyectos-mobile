@@ -1,4 +1,5 @@
-import { Text, Pressable, KeyboardAvoidingView, Platform, ScrollView } from 'react-native';
+import { View, Text, Pressable, KeyboardAvoidingView, Platform, ScrollView, TextInput } from 'react-native';
+import { useRef } from 'react';
 import { useRouter } from 'expo-router';
 import { MotiView } from 'moti';
 import { useForm } from '@tanstack/react-form';
@@ -17,6 +18,8 @@ import { loginSchema } from '../../domain/schemas/auth.schema';
 export function LoginScreen() {
     const router = useRouter();
     const { login } = useAuth();
+    
+    const passwordRef = useRef<TextInput>(null);
 
     const form = useForm({
         defaultValues: {
@@ -77,6 +80,9 @@ export function LoginScreen() {
                                     value={field.state.value}
                                     onChangeText={field.handleChange}
                                     onBlur={() => field.handleBlur()}
+                                    returnKeyType="next"
+                                    onSubmitEditing={() => passwordRef.current?.focus()}
+                                    blurOnSubmit={false}
                                     error={
                                         field.state.meta.isTouched && field.state.meta.errors.length > 0
                                             ? getErrorMessage(field.state.meta.errors)
@@ -101,6 +107,7 @@ export function LoginScreen() {
                         >
                             {(field) => (
                                 <Input
+                                    ref={passwordRef}
                                     label="Contraseña"
                                     icon="lock-closed-outline"
                                     placeholder="••••••••"
@@ -109,6 +116,8 @@ export function LoginScreen() {
                                     value={field.state.value}
                                     onChangeText={field.handleChange}
                                     onBlur={() => field.handleBlur()}
+                                    returnKeyType="done"
+                                    onSubmitEditing={() => form.handleSubmit()}
                                     error={
                                         field.state.meta.isTouched && field.state.meta.errors.length > 0
                                             ? getErrorMessage(field.state.meta.errors)

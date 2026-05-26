@@ -1,4 +1,5 @@
-import { Text, Pressable, KeyboardAvoidingView, Platform, ScrollView } from 'react-native';
+import { View, Text, Pressable, KeyboardAvoidingView, Platform, ScrollView, TextInput } from 'react-native';
+import { useRef } from 'react';
 import { useRouter } from 'expo-router';
 import { MotiView } from 'moti';
 import { useForm } from '@tanstack/react-form';
@@ -15,6 +16,10 @@ import { registerSchema, fieldSchemas } from '../../domain/schemas/auth.schema';
 export function RegisterScreen() {
     const router = useRouter();
     const { register } = useAuth();
+
+    const emailRef = useRef<TextInput>(null);
+    const passwordRef = useRef<TextInput>(null);
+    const confirmPasswordRef = useRef<TextInput>(null);
 
     const form = useForm({
         defaultValues: {
@@ -107,6 +112,9 @@ export function RegisterScreen() {
                                     value={field.state.value}
                                     onChangeText={field.handleChange}
                                     onBlur={() => field.handleBlur()}
+                                    returnKeyType="next"
+                                    onSubmitEditing={() => emailRef.current?.focus()}
+                                    blurOnSubmit={false}
                                     error={
                                         field.state.meta.isTouched && field.state.meta.errors.length > 0
                                             ? getErrorMessage(field.state.meta.errors)
@@ -129,6 +137,7 @@ export function RegisterScreen() {
                         >
                             {(field) => (
                                 <Input
+                                    ref={emailRef}
                                     label="Correo electrónico"
                                     icon="mail-outline"
                                     placeholder="tu@email.com"
@@ -138,6 +147,9 @@ export function RegisterScreen() {
                                     value={field.state.value}
                                     onChangeText={field.handleChange}
                                     onBlur={() => field.handleBlur()}
+                                    returnKeyType="next"
+                                    onSubmitEditing={() => passwordRef.current?.focus()}
+                                    blurOnSubmit={false}
                                     error={
                                         field.state.meta.isTouched && field.state.meta.errors.length > 0
                                             ? getErrorMessage(field.state.meta.errors)
@@ -160,6 +172,7 @@ export function RegisterScreen() {
                         >
                             {(field) => (
                                 <Input
+                                    ref={passwordRef}
                                     label="Contraseña"
                                     icon="lock-closed-outline"
                                     placeholder="Mínimo 8 caracteres, 1 mayúscula, 1 número"
@@ -168,6 +181,9 @@ export function RegisterScreen() {
                                     value={field.state.value}
                                     onChangeText={field.handleChange}
                                     onBlur={() => field.handleBlur()}
+                                    returnKeyType="next"
+                                    onSubmitEditing={() => confirmPasswordRef.current?.focus()}
+                                    blurOnSubmit={false}
                                     error={
                                         field.state.meta.isTouched && field.state.meta.errors.length > 0
                                             ? getErrorMessage(field.state.meta.errors)
@@ -190,6 +206,7 @@ export function RegisterScreen() {
                         >
                             {(field) => (
                                 <Input
+                                    ref={confirmPasswordRef}
                                     label="Confirmar contraseña"
                                     icon="lock-closed-outline"
                                     placeholder="Repite tu contraseña"
@@ -198,6 +215,8 @@ export function RegisterScreen() {
                                     value={field.state.value}
                                     onChangeText={field.handleChange}
                                     onBlur={() => field.handleBlur()}
+                                    returnKeyType="done"
+                                    onSubmitEditing={() => form.handleSubmit()}
                                     error={
                                         field.state.meta.isTouched && field.state.meta.errors.length > 0
                                             ? getErrorMessage(field.state.meta.errors)

@@ -8,6 +8,7 @@ import {
     type ViewStyle,
     type TextStyle,
 } from 'react-native';
+import Animated, { useSharedValue, useAnimatedStyle, withSpring } from 'react-native-reanimated';
 import * as Haptics from 'expo-haptics';
 
 type ButtonVariant = 'primary' | 'outline' | 'ghost';
@@ -91,6 +92,23 @@ export function Button({
     ...props
 }: ButtonProps) {
     const isDisabled = disabled || loading;
+    const scale = useSharedValue(1);
+
+    const animatedStyle = useAnimatedStyle(() => ({
+        transform: [{ scale: scale.value }],
+    }));
+
+    const handlePressIn = (e: any) => {
+        if (!isDisabled) {
+            scale.value = withSpring(0.94, { damping: 15, stiffness: 300 });
+        }
+        props.onPressIn?.(e);
+    };
+
+    const handlePressOut = (e: any) => {
+        scale.value = withSpring(1, { damping: 15, stiffness: 300 });
+        props.onPressOut?.(e);
+    };
 
     const handlePress = (e: any) => {
         Haptics.impactAsync(Haptics.ImpactFeedbackStyle.Light);
@@ -100,16 +118,19 @@ export function Button({
     return (
         <Pressable
             onPress={handlePress}
+            onPressIn={handlePressIn}
+            onPressOut={handlePressOut}
             disabled={isDisabled}
             style={({ pressed }) => ({
-                ...(pressed && !isDisabled ? { opacity: 0.9, transform: [{ scale: 0.97 }] } : {}),
+                ...(pressed && !isDisabled ? { opacity: 0.9 } : {}),
             })}
             {...props}
         >
-            <View
+            <Animated.View
                 style={[
                     baseContainerStyle,
                     isDisabled ? variantStyles[variant].disabled : variantStyles[variant].normal,
+                    animatedStyle,
                 ]}
             >
                 {loading ? (
@@ -123,7 +144,7 @@ export function Button({
                         <Text style={textStyles[variant]}>{title}</Text>
                     </>
                 )}
-            </View>
+            </Animated.View>
         </Pressable>
     );
 }

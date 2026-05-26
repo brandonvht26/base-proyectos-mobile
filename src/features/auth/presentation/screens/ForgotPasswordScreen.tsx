@@ -103,6 +103,8 @@ export function ForgotPasswordScreen() {
                                     value={field.state.value}
                                     onChangeText={field.handleChange}
                                     onBlur={() => field.handleBlur()}
+                                    returnKeyType="done"
+                                    onSubmitEditing={() => form.handleSubmit()}
                                     error={
                                         field.state.meta.isTouched && field.state.meta.errors.length > 0
                                             ? getErrorMessage(field.state.meta.errors)
