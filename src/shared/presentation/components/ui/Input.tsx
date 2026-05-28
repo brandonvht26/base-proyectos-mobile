@@ -9,6 +9,8 @@ import {
 import { Ionicons } from '@expo/vector-icons';
 import { MotiView } from 'moti';
 
+import { colors } from '../../theme/colors';
+
 interface InputProps extends Omit<TextInputProps, 'onBlur'> {
     label: string;
     error?: string;
@@ -16,18 +18,6 @@ interface InputProps extends Omit<TextInputProps, 'onBlur'> {
     isPassword?: boolean;
     onBlur?: () => void;
 }
-
-const COLORS = {
-    bgUnfocused: '#F8FAFC',
-    bgFocused: '#FFFFFF',
-    borderUnfocused: '#E2E8F0',
-    borderFocused: '#2563EB',
-    error: '#EF4444',
-    text: '#0F172A',
-    placeholder: '#94A3B8',
-    label: '#475569',
-    iconUnfocused: '#64748B',
-};
 
 export const Input = forwardRef<TextInput, InputProps>(({
     label,
@@ -50,18 +40,17 @@ export const Input = forwardRef<TextInput, InputProps>(({
     }, [onBlur]);
 
     const isError = Boolean(error);
-    const borderColor = isError ? COLORS.error : isFocused ? COLORS.borderFocused : COLORS.borderUnfocused;
-    const backgroundColor = isFocused || isError ? COLORS.bgFocused : COLORS.bgUnfocused;
-    const iconColor = isError ? COLORS.error : isFocused ? COLORS.borderFocused : COLORS.iconUnfocused;
+    const borderColor = isError ? colors.danger : isFocused ? colors.accent : colors.border;
+    const backgroundColor = isFocused || isError ? colors.surface : colors.bgUnfocused;
+    const iconColor = isError ? colors.danger : isFocused ? colors.accent : colors.muted;
 
     return (
-        <View style={{ marginBottom: 20 }}>
-            {/* Label */}
+        <View style={{ marginBottom: 20, overflow: 'visible' }}>
             <Text
                 style={{
                     fontFamily: 'GoogleSansFlex-Bold',
                     fontSize: 13,
-                    color: isError ? COLORS.error : COLORS.label,
+                    color: isError ? colors.danger : colors.label,
                     marginBottom: 8,
                     marginLeft: 4,
                     textTransform: 'uppercase',
@@ -71,12 +60,11 @@ export const Input = forwardRef<TextInput, InputProps>(({
                 {label}
             </Text>
 
-            {/* Input container */}
             <MotiView
                 animate={{
                     borderColor,
-                    shadowOpacity: isFocused ? 0.1 : 0,
-                    scale: isFocused ? 1.02 : 1,
+                    borderWidth: isFocused || isError ? 1.5 : 1,
+                    shadowOpacity: isFocused && !isError ? 0.1 : 0,
                 }}
                 transition={{ type: 'timing', duration: 200 }}
                 style={{
@@ -87,10 +75,10 @@ export const Input = forwardRef<TextInput, InputProps>(({
                     borderWidth: isFocused || isError ? 1.5 : 1,
                     paddingHorizontal: 16,
                     height: 56,
-                    shadowColor: isFocused && !isError ? COLORS.borderFocused : '#000',
+                    shadowColor: isFocused && !isError ? colors.accent : 'transparent',
                     shadowOffset: { width: 0, height: 2 },
                     shadowRadius: 4,
-                    elevation: isFocused ? 2 : 0,
+                    elevation: isFocused && !isError ? 2 : 0,
                 }}
             >
                 {icon && (
@@ -108,10 +96,10 @@ export const Input = forwardRef<TextInput, InputProps>(({
                         flex: 1,
                         fontFamily: 'Lato-Regular',
                         fontSize: 15,
-                        color: COLORS.text,
+                        color: colors.textPrimary,
                         paddingVertical: 0,
                     }}
-                    placeholderTextColor={COLORS.placeholder}
+                    placeholderTextColor={colors.mutedLight}
                     secureTextEntry={isPassword && !isPasswordVisible}
                     onFocus={handleFocus}
                     onBlur={handleBlur}
@@ -127,13 +115,12 @@ export const Input = forwardRef<TextInput, InputProps>(({
                         <Ionicons
                             name={isPasswordVisible ? 'eye-off-outline' : 'eye-outline'}
                             size={20}
-                            color={COLORS.iconUnfocused}
+                            color={colors.muted}
                         />
                     </Pressable>
                 )}
             </MotiView>
 
-            {/* Error message */}
             {error && (
                 <MotiView
                     from={{ opacity: 0, translateY: -4 }}
@@ -144,7 +131,7 @@ export const Input = forwardRef<TextInput, InputProps>(({
                         style={{
                             fontFamily: 'Lato-Regular',
                             fontSize: 13,
-                            color: COLORS.error,
+                            color: colors.danger,
                             marginTop: 6,
                             marginLeft: 4,
                         }}

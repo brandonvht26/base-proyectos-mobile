@@ -1,4 +1,4 @@
-import { View, Text, Pressable, KeyboardAvoidingView, Platform, ScrollView, TextInput } from 'react-native';
+import { View, Text, Pressable, TextInput } from 'react-native';
 import { useRef } from 'react';
 import { useRouter } from 'expo-router';
 import { MotiView } from 'moti';
@@ -10,7 +10,9 @@ import { toast } from 'sonner-native';
 import { Input } from '../../../../shared/presentation/components/ui/Input';
 import { Button } from '../../../../shared/presentation/components/ui/Button';
 import { Divider } from '../../../../shared/presentation/components/ui/Divider';
+import { KeyboardAwareScrollView } from '../../../../shared/presentation/components/ui/KeyboardAwareScrollView';
 import { getErrorMessage } from '../../../../shared/presentation/utils/form';
+import { colors } from '../../../../shared/presentation/theme/colors';
 import { AuthHeader } from '../components/AuthHeader';
 import { useAuth } from '../hooks/useAuth';
 import { loginSchema } from '../../domain/schemas/auth.schema';
@@ -18,7 +20,7 @@ import { loginSchema } from '../../domain/schemas/auth.schema';
 export function LoginScreen() {
     const router = useRouter();
     const { login } = useAuth();
-    
+
     const passwordRef = useRef<TextInput>(null);
 
     const form = useForm({
@@ -35,29 +37,29 @@ export function LoginScreen() {
     });
 
     return (
-        <SafeAreaView style={{ flex: 1, backgroundColor: '#FFFFFF' }}>
-            <KeyboardAvoidingView
-                behavior={Platform.OS === 'ios' ? 'padding' : 'height'}
-                style={{ flex: 1 }}
-            >
-                <ScrollView
-                    contentContainerStyle={{
-                        flexGrow: 1,
-                        paddingHorizontal: 28,
-                        paddingTop: 48,
-                        paddingBottom: 32,
-                    }}
-                    keyboardShouldPersistTaps="handled"
-                    showsVerticalScrollIndicator={false}
-                >
-                    {/* ─── Header ─── */}
-                    <AuthHeader
-                        title="Bienvenido"
-                        subtitle="Inicia sesión para continuar"
-                        icon="person-circle-outline"
-                    />
+        <SafeAreaView style={{ flex: 1, backgroundColor: colors.accent }}>
+            <AuthHeader
+                title="Bienvenido"
+                subtitle="Inicia sesión para continuar"
+                icon="person-circle-outline"
+            />
 
-                    {/* ─── Email ─── */}
+            <View
+                style={{
+                    flex: 1,
+                    backgroundColor: colors.surface,
+                    borderTopLeftRadius: 40,
+                    borderTopRightRadius: 40,
+                    marginTop: -20,
+                    paddingTop: 36,
+                    paddingHorizontal: 28,
+                    overflow: 'visible',
+                }}
+            >
+                <KeyboardAwareScrollView
+                    contentContainerStyle={{ paddingBottom: 32 }}
+                    extraScrollPadding={40}
+                >
                     <MotiView
                         from={{ opacity: 0, translateY: 20 }}
                         animate={{ opacity: 1, translateY: 0 }}
@@ -93,7 +95,6 @@ export function LoginScreen() {
                         </form.Field>
                     </MotiView>
 
-                    {/* ─── Password ─── */}
                     <MotiView
                         from={{ opacity: 0, translateY: 20 }}
                         animate={{ opacity: 1, translateY: 0 }}
@@ -128,7 +129,6 @@ export function LoginScreen() {
                         </form.Field>
                     </MotiView>
 
-                    {/* ─── ¿Olvidaste tu contraseña? ─── */}
                     <MotiView
                         from={{ opacity: 0 }}
                         animate={{ opacity: 1 }}
@@ -143,7 +143,7 @@ export function LoginScreen() {
                                 style={{
                                     fontFamily: 'Lato-Bold',
                                     fontSize: 13,
-                                    color: '#3B6FD4',
+                                    color: colors.accent,
                                 }}
                             >
                                 ¿Olvidaste tu contraseña?
@@ -151,7 +151,6 @@ export function LoginScreen() {
                         </Pressable>
                     </MotiView>
 
-                    {/* ─── Botón Login ─── */}
                     <MotiView
                         from={{ opacity: 0, translateY: 20 }}
                         animate={{ opacity: 1, translateY: 0 }}
@@ -164,7 +163,6 @@ export function LoginScreen() {
                         />
                     </MotiView>
 
-                    {/* ─── Divider ─── */}
                     <MotiView
                         from={{ opacity: 0 }}
                         animate={{ opacity: 1 }}
@@ -173,7 +171,6 @@ export function LoginScreen() {
                         <Divider text="o continúa con" />
                     </MotiView>
 
-                    {/* ─── Google Button ─── */}
                     <MotiView
                         from={{ opacity: 0, translateY: 20 }}
                         animate={{ opacity: 1, translateY: 0 }}
@@ -183,16 +180,14 @@ export function LoginScreen() {
                             title="Continuar con Google"
                             variant="outline"
                             icon={
-                                <Ionicons name="logo-google" size={20} color="#1E2A3A" />
+                                <Ionicons name="logo-google" size={20} color={colors.textPrimary} />
                             }
                             onPress={() => {
-                                // TODO: Implementar Google Sign-In
                                 toast.info('Google Sign-In — próximamente');
                             }}
                         />
                     </MotiView>
 
-                    {/* ─── Link a Registro ─── */}
                     <MotiView
                         from={{ opacity: 0 }}
                         animate={{ opacity: 1 }}
@@ -207,7 +202,7 @@ export function LoginScreen() {
                             style={{
                                 fontFamily: 'Lato-Regular',
                                 fontSize: 14,
-                                color: '#8A8E94',
+                                color: colors.muted,
                             }}
                         >
                             ¿No tienes cuenta?{' '}
@@ -220,15 +215,15 @@ export function LoginScreen() {
                                 style={{
                                     fontFamily: 'Lato-Bold',
                                     fontSize: 14,
-                                    color: '#3B6FD4',
+                                    color: colors.accent,
                                 }}
                             >
                                 Regístrate
                             </Text>
                         </Pressable>
                     </MotiView>
-                </ScrollView>
-            </KeyboardAvoidingView>
+                </KeyboardAwareScrollView>
+            </View>
         </SafeAreaView>
     );
 }

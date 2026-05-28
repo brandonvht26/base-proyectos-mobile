@@ -4,13 +4,13 @@
 
 @layer base {
     :root {
-        --color-primary: #1E2A3A;
-        --color-surface: #F7F8FA;
-        --color-accent: #3B6FD4;
-        --color-border: #CBD2DC;
-        --color-muted: #8A8E94;
-        --color-danger: #D94F4F;
-        --color-warning: #D4A017;
-        --color-success: #2E9E5B;
+        --color-primary: #18181B;
+        --color-surface: #FFFFFF;
+        --color-accent: #4F46E5;
+        --color-border: #E4E4E7;
+        --color-muted: #71717A;
+        --color-danger: #EF4444;
+        --color-warning: #F59E0B;
+        --color-success: #10B981;
     }
 }

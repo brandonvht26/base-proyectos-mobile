@@ -11,6 +11,8 @@ import {
 import Animated, { useSharedValue, useAnimatedStyle, withSpring } from 'react-native-reanimated';
 import * as Haptics from 'expo-haptics';
 
+import { colors } from '../../theme/colors';
+
 type ButtonVariant = 'primary' | 'outline' | 'ghost';
 
 interface ButtonProps extends Omit<PressableProps, 'children' | 'style'> {
@@ -19,16 +21,6 @@ interface ButtonProps extends Omit<PressableProps, 'children' | 'style'> {
     loading?: boolean;
     icon?: ReactNode;
 }
-
-// Colores Premium (inspirados en Tailwind Slate/Blue)
-const COLORS = {
-    primaryBg: '#2563EB',
-    primaryText: '#FFFFFF',
-    primaryDisabledBg: '#93C5FD',
-    outlineBorder: '#E2E8F0',
-    outlineText: '#0F172A',
-    ghostText: '#2563EB',
-};
 
 const baseContainerStyle: ViewStyle = {
     flexDirection: 'row',
@@ -42,18 +34,18 @@ const baseContainerStyle: ViewStyle = {
 const variantStyles: Record<ButtonVariant, { normal: ViewStyle; disabled: ViewStyle }> = {
     primary: {
         normal: {
-            backgroundColor: COLORS.primaryBg,
-            shadowColor: COLORS.primaryBg,
+            backgroundColor: colors.accent,
+            shadowColor: colors.accent,
             shadowOffset: { width: 0, height: 4 },
             shadowOpacity: 0.2,
             shadowRadius: 8,
             elevation: 4,
         },
-        disabled: { backgroundColor: COLORS.primaryDisabledBg, shadowOpacity: 0, elevation: 0 },
+        disabled: { backgroundColor: colors.accentLight, shadowOpacity: 0, elevation: 0 },
     },
     outline: {
-        normal: { backgroundColor: '#FFFFFF', borderWidth: 1.5, borderColor: COLORS.outlineBorder },
-        disabled: { backgroundColor: '#F8FAFC', borderWidth: 1.5, borderColor: '#F1F5F9', opacity: 0.7 },
+        normal: { backgroundColor: colors.surface, borderWidth: 1.5, borderColor: colors.border },
+        disabled: { backgroundColor: colors.bgDisabled, borderWidth: 1.5, borderColor: colors.borderLight, opacity: 0.7 },
     },
     ghost: {
         normal: { backgroundColor: 'transparent' },
@@ -63,19 +55,19 @@ const variantStyles: Record<ButtonVariant, { normal: ViewStyle; disabled: ViewSt
 
 const textStyles: Record<ButtonVariant, TextStyle> = {
     primary: {
-        color: COLORS.primaryText,
+        color: colors.textInverse,
         fontFamily: 'GoogleSansFlex-Bold',
         fontSize: 16,
         letterSpacing: 0.3,
     },
     outline: {
-        color: COLORS.outlineText,
+        color: colors.textPrimary,
         fontFamily: 'GoogleSansFlex-Bold',
         fontSize: 16,
         letterSpacing: 0.3,
     },
     ghost: {
-        color: COLORS.ghostText,
+        color: colors.accent,
         fontFamily: 'GoogleSansFlex-Bold',
         fontSize: 15,
         letterSpacing: 0.3,
@@ -136,7 +128,7 @@ export function Button({
                 {loading ? (
                     <ActivityIndicator
                         size="small"
-                        color={variant === 'primary' ? COLORS.primaryText : COLORS.primaryBg}
+                        color={variant === 'primary' ? colors.textInverse : colors.accent}
                     />
                 ) : (
                     <>

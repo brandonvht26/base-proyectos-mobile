@@ -1,7 +1,7 @@
 import { DefaultTheme, ThemeProvider } from '@react-navigation/native';
 import { QueryClient, QueryClientProvider } from '@tanstack/react-query';
 import { useFonts } from 'expo-font';
-import { Stack, useSegments, useRouter } from 'expo-router';
+import { Stack, usePathname, useRouter } from 'expo-router';
 import { StatusBar } from 'expo-status-bar';
 import { useEffect } from 'react';
 import { View } from 'react-native';
@@ -27,12 +27,12 @@ const AppTheme = {
     ...DefaultTheme,
     colors: {
         ...DefaultTheme.colors,
-        primary: '#3B6FD4',
+        primary: '#4F46E5',
         background: '#FFFFFF',
         card: '#FFFFFF',
-        text: '#1E2A3A',
-        border: '#CBD2DC',
-        notification: '#D94F4F',
+        text: '#18181B',
+        border: '#E4E4E7',
+        notification: '#EF4444',
     },
 };
 
@@ -83,22 +83,21 @@ export default function RootLayout() {
     }, []);
 
     // Auth Guard: Redirección automática según el estado
-    const segments = useSegments();
+    const pathname = usePathname();
     const router = useRouter();
 
     useEffect(() => {
         if (isLoading || !fontsLoaded) return;
 
-        const inAuthGroup = segments[0] === 'auth';
+        const isIndex = pathname === '/';
+        const inAuthGroup = pathname.startsWith('/auth');
 
-        if (!user && !inAuthGroup) {
-            // No logueado + intenta acceder a main o index -> redirigir a login
+        if (!user && !inAuthGroup && !isIndex) {
             router.replace('/auth/login');
         } else if (user && inAuthGroup) {
-            // Logueado + intenta acceder a login/register -> redirigir a main
             router.replace('/main');
         }
-    }, [user, isLoading, segments, fontsLoaded]);
+    }, [user, isLoading, pathname, fontsLoaded]);
 
     if (!fontsLoaded) {
         return <View style={{ flex: 1, backgroundColor: '#FFFFFF' }} />;
@@ -120,12 +119,12 @@ export default function RootLayout() {
                             toastOptions={{
                                 style: {
                                     backgroundColor: '#FFFFFF',
-                                    borderColor: '#CBD2DC',
+                                    borderColor: '#E4E4E7',
                                     borderWidth: 1,
                                 },
                                 titleStyle: {
                                     fontFamily: 'GoogleSansFlex-Bold',
-                                    color: '#1E2A3A',
+                                    color: '#18181B',
                                 },
                             }}
                         />

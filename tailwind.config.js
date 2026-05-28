@@ -8,14 +8,14 @@ module.exports = {
     theme: {
         extend: {
             colors: {
-                primary: '#1E2A3A',
-                surface: '#F7F8FA',
-                accent: '#3B6FD4',
-                border: '#CBD2DC',
-                muted: '#8A8E94',
-                danger: '#D94F4F',
-                warning: '#D4A017',
-                success: '#2E9E5B',
+                primary: '#18181B',
+                surface: '#FFFFFF',
+                accent: '#4F46E5',
+                border: '#E4E4E7',
+                muted: '#71717A',
+                danger: '#EF4444',
+                warning: '#F59E0B',
+                success: '#10B981',
             },
             fontFamily: {
                 sans: ['GoogleSansFlex-Regular'],

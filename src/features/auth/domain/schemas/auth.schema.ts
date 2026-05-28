@@ -13,14 +13,18 @@ const passwordField = z
     .min(8, 'Mínimo 8 caracteres');
 
 const strongPasswordField = passwordField
+    .min(8, 'Mínimo 8 caracteres')
+    .max(30, 'Máximo 30 caracteres')
     .regex(/[A-Z]/, 'Debe contener al menos una mayúscula')
-    .regex(/[0-9]/, 'Debe contener al menos un número');
+    .regex(/[a-z]/, 'Debe contener al menos una minúscula')
+    .regex(/[\d\W_]/, 'Debe contener al menos un número o símbolo especial');
 
 const nameField = z
     .string()
     .min(1, 'El nombre es requerido')
     .min(2, 'Mínimo 2 caracteres')
-    .max(50, 'Máximo 50 caracteres');
+    .max(40, 'Máximo 40 caracteres')
+    .regex(/^[a-zA-ZáéíóúÁÉÍÓÚñÑüÜ'\s]+$/, 'Solo se permiten letras, espacios y apóstrofes');
 
 const confirmPasswordField = z
     .string()

@@ -51,7 +51,9 @@ export const useAuth = () => {
         },
         onSuccess: () => {
             toast.success('Revisa tu correo para recuperar tu contraseña');
-            router.back();
+            setTimeout(() => {
+                router.replace('/auth/login');
+            }, 1500);
         },
         onError: (error: Error) => {
             toast.error(error.message ?? 'Error al enviar el correo');

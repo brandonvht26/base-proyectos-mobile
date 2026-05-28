@@ -1,14 +1,15 @@
-import { View, Text, Pressable, KeyboardAvoidingView, Platform, ScrollView, TextInput } from 'react-native';
+import { View, Text, Pressable, TextInput } from 'react-native';
 import { useRef } from 'react';
 import { useRouter } from 'expo-router';
 import { MotiView } from 'moti';
 import { useForm } from '@tanstack/react-form';
 import { SafeAreaView } from 'react-native-safe-area-context';
-import { Ionicons } from '@expo/vector-icons';
 
 import { Input } from '../../../../shared/presentation/components/ui/Input';
 import { Button } from '../../../../shared/presentation/components/ui/Button';
+import { KeyboardAwareScrollView } from '../../../../shared/presentation/components/ui/KeyboardAwareScrollView';
 import { getErrorMessage } from '../../../../shared/presentation/utils/form';
+import { colors } from '../../../../shared/presentation/theme/colors';
 import { AuthHeader } from '../components/AuthHeader';
 import { useAuth } from '../hooks/useAuth';
 import { registerSchema, fieldSchemas } from '../../domain/schemas/auth.schema';
@@ -41,58 +42,30 @@ export function RegisterScreen() {
     });
 
     return (
-        <SafeAreaView style={{ flex: 1, backgroundColor: '#FFFFFF' }}>
-            <KeyboardAvoidingView
-                behavior={Platform.OS === 'ios' ? 'padding' : 'height'}
-                style={{ flex: 1 }}
+        <SafeAreaView style={{ flex: 1, backgroundColor: colors.accent }}>
+            <AuthHeader
+                title="Crear cuenta"
+                subtitle="Completa tus datos para registrarte"
+                icon="person-add-outline"
+                showBack
+            />
+
+            <View
+                style={{
+                    flex: 1,
+                    backgroundColor: colors.surface,
+                    borderTopLeftRadius: 40,
+                    borderTopRightRadius: 40,
+                    marginTop: -20,
+                    paddingTop: 36,
+                    paddingHorizontal: 28,
+                    overflow: 'visible',
+                }}
             >
-                <ScrollView
-                    contentContainerStyle={{
-                        flexGrow: 1,
-                        paddingHorizontal: 28,
-                        paddingTop: 16,
-                        paddingBottom: 32,
-                    }}
-                    keyboardShouldPersistTaps="handled"
-                    showsVerticalScrollIndicator={false}
+                <KeyboardAwareScrollView
+                    contentContainerStyle={{ paddingBottom: 32 }}
+                    extraScrollPadding={40}
                 >
-                    {/* ─── Botón Volver ─── */}
-                    <MotiView
-                        from={{ opacity: 0, translateX: -10 }}
-                        animate={{ opacity: 1, translateX: 0 }}
-                        transition={{ type: 'timing', duration: 400 }}
-                    >
-                        <Pressable
-                            onPress={() => router.back()}
-                            style={{
-                                flexDirection: 'row',
-                                alignItems: 'center',
-                                marginBottom: 16,
-                            }}
-                            hitSlop={8}
-                        >
-                            <Ionicons name="chevron-back" size={24} color="#1E2A3A" />
-                            <Text
-                                style={{
-                                    fontFamily: 'GoogleSansFlex-Bold',
-                                    fontSize: 15,
-                                    color: '#1E2A3A',
-                                    marginLeft: 4,
-                                }}
-                            >
-                                Volver
-                            </Text>
-                        </Pressable>
-                    </MotiView>
-
-                    {/* ─── Header ─── */}
-                    <AuthHeader
-                        title="Crear cuenta"
-                        subtitle="Completa tus datos para registrarte"
-                        icon="person-add-outline"
-                    />
-
-                    {/* ─── Nombre ─── */}
                     <MotiView
                         from={{ opacity: 0, translateY: 20 }}
                         animate={{ opacity: 1, translateY: 0 }}
@@ -125,7 +98,6 @@ export function RegisterScreen() {
                         </form.Field>
                     </MotiView>
 
-                    {/* ─── Email ─── */}
                     <MotiView
                         from={{ opacity: 0, translateY: 20 }}
                         animate={{ opacity: 1, translateY: 0 }}
@@ -160,7 +132,6 @@ export function RegisterScreen() {
                         </form.Field>
                     </MotiView>
 
-                    {/* ─── Contraseña ─── */}
                     <MotiView
                         from={{ opacity: 0, translateY: 20 }}
                         animate={{ opacity: 1, translateY: 0 }}
@@ -194,7 +165,6 @@ export function RegisterScreen() {
                         </form.Field>
                     </MotiView>
 
-                    {/* ─── Confirmar Contraseña ─── */}
                     <MotiView
                         from={{ opacity: 0, translateY: 20 }}
                         animate={{ opacity: 1, translateY: 0 }}
@@ -227,7 +197,6 @@ export function RegisterScreen() {
                         </form.Field>
                     </MotiView>
 
-                    {/* ─── Botón Registrar ─── */}
                     <MotiView
                         from={{ opacity: 0, translateY: 20 }}
                         animate={{ opacity: 1, translateY: 0 }}
@@ -241,7 +210,6 @@ export function RegisterScreen() {
                         />
                     </MotiView>
 
-                    {/* ─── Link a Login ─── */}
                     <MotiView
                         from={{ opacity: 0 }}
                         animate={{ opacity: 1 }}
@@ -256,7 +224,7 @@ export function RegisterScreen() {
                             style={{
                                 fontFamily: 'Lato-Regular',
                                 fontSize: 14,
-                                color: '#8A8E94',
+                                color: colors.muted,
                             }}
                         >
                             ¿Ya tienes cuenta?{' '}
@@ -266,15 +234,15 @@ export function RegisterScreen() {
                                 style={{
                                     fontFamily: 'Lato-Bold',
                                     fontSize: 14,
-                                    color: '#3B6FD4',
+                                    color: colors.accent,
                                 }}
                             >
                                 Inicia sesión
                             </Text>
                         </Pressable>
                     </MotiView>
-                </ScrollView>
-            </KeyboardAvoidingView>
+                </KeyboardAwareScrollView>
+            </View>
         </SafeAreaView>
     );
 }
